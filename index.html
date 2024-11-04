@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            color: #333;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        .tip {
+            background-color: #e8f4f8;
+            border-left: 4px solid #4a9eca;
+            padding: 10px 15px;
+            margin: 15px 0;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin: 15px 0;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        /* Syntax Highlighting */
+        .keyword { color: #0033cc; } /* def, class, if, etc */
+        .decorator { color: #6f42c1; } /* @property */
+        .string { color: #008000; } /* String literals */
+        .comment { color: #6a737d; } /* Comments */
+        .function { color: #6f42c1; } /* Function names */
+        .self { color: #e36209; } /* self keyword */
+        .builtin { color: #005cc5; } /* print, len, sum */
+        .number { color: #005cc5; } /* Numeric literals */
+    </style>
+</head>
+<body>
+    <h1>Writing a Python Class</h1>
+    
+    <div class="tip">
+        <strong>Requirement:</strong> Create a class with constructor, attributes, methods, properties, and __str__ method implementation.
+    </div>
+
+    <h2>1. Basic Class Structure</h2>
+    <pre>
+<span class="keyword">class</span> <span class="function">Student</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="self">self</span>, name, student_id):
+        <span class="comment"># Constructor (initializer)</span>
+        <span class="self">self</span>._name = name          <span class="comment"># protected attribute</span>
+        <span class="self">self</span>._student_id = student_id
+        <span class="self">self</span>._grades = []          <span class="comment"># empty list to store grades</span>
+    
+    <span class="keyword">def</span> <span class="function">__str__</span>(<span class="self">self</span>):
+        <span class="comment"># String representation</span>
+        <span class="keyword">return</span> <span class="string">f"Student: {self._name} (ID: {self._student_id})"</span></pre>
+
+    <h2>2. Adding Methods</h2>
+    <pre>
+    <span class="keyword">def</span> <span class="function">add_grade</span>(<span class="self">self</span>, grade):
+        <span class="string">"""Add a new grade to the student's record."""</span>
+        <span class="keyword">if</span> <span class="number">0</span> <= grade <= <span class="number">100</span>:
+            <span class="self">self</span>._grades.append(grade)
+        <span class="keyword">else</span>:
+            <span class="keyword">raise</span> <span class="builtin">ValueError</span>(<span class="string">"Grade must be between 0 and 100"</span>)
+    
+    <span class="keyword">def</span> <span class="function">calculate_average</span>(<span class="self">self</span>):
+        <span class="string">"""Calculate the average of all grades."""</span>
+        <span class="keyword">if not</span> <span class="self">self</span>._grades:
+            <span class="keyword">return</span> <span class="number">0</span>
+        <span class="keyword">return</span> <span class="builtin">sum</span>(<span class="self">self</span>._grades) / <span class="builtin">len</span>(<span class="self">self</span>._grades)</pre>
+
+    <h2>3. Using Properties</h2>
+    <pre>
+    <span class="decorator">@property</span>
+    <span class="keyword">def</span> <span class="function">name</span>(<span class="self">self</span>):
+        <span class="string">"""Getter for name."""</span>
+        <span class="keyword">return</span> <span class="self">self</span>._name
+    
+    <span class="decorator">@name.setter</span>
+    <span class="keyword">def</span> <span class="function">name</span>(<span class="self">self</span>, new_name):
+        <span class="string">"""Setter for name."""</span>
+        <span class="keyword">if</span> <span class="builtin">isinstance</span>(new_name, <span class="builtin">str</span>) <span class="keyword">and</span> new_name.strip():
+            <span class="self">self</span>._name = new_name.strip()
+        <span class="keyword">else</span>:
+            <span class="keyword">raise</span> <span class="builtin">ValueError</span>(<span class="string">"Name must be a non-empty string"</span>)</pre>
+
+    <h2>4. Demo Area Template</h2>
+    <pre>
+<span class="comment"># DEMO AREA</span>
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    <span class="comment"># Create a student</span>
+    student1 = <span class="function">Student</span>(<span class="string">"Alice Smith"</span>, <span class="string">"A12345"</span>)
+    
+    <span class="comment"># Test string representation</span>
+    <span class="builtin">print</span>(student1)  <span class="comment"># Should show student info</span>
+    
+    <span class="comment"># Test adding grades</span>
+    student1.add_grade(<span class="number">85</span>)
+    student1.add_grade(<span class="number">92</span>)
+    student1.add_grade(<span class="number">78</span>)
+    
+    <span class="comment"># Test calculating average</span>
+    <span class="builtin">print</span>(<span class="string">f"Average grade: {</span>student1.calculate_average()<span class="string">}"</span>)
+    
+    <span class="comment"># Test property</span>
+    <span class="builtin">print</span>(<span class="string">f"Student name: {</span>student1.name<span class="string">}"</span>)
+    student1.name = <span class="string">"Alice Johnson"</span>  <span class="comment"># Using the setter</span>
+    <span class="builtin">print</span>(<span class="string">f"Updated name: {</span>student1.name<span class="string">}"</span>)</pre>
+
+    <div class="warning">
+        <strong>Common Mistakes to Avoid:</strong>
+        <ul>
+            <li>Forgetting <code class="self">self</code> parameter in methods</li>
+            <li>Not implementing <code class="function">__str__</code> method</li>
+            <li>Incorrect property decorators</li>
+            <li>Missing input validation</li>
+            <li>Not testing all functionality in the demo area</li>
+        </ul>
+    </div>
+
+    <h2>Checklist</h2>
+    <ul>
+        <li>✅ Class name follows PascalCase convention</li>
+        <li>✅ Constructor with appropriate parameters</li>
+        <li>✅ Protected attributes (using single underscore)</li>
+        <li>✅ __str__ method implementation</li>
+        <li>✅ At least one property with getter/setter</li>
+        <li>✅ Methods with docstrings</li>
+        <li>✅ Input validation where appropriate</li>
+        <li>✅ Complete demo area with tests</li>
+    </ul>
+</body>
+</html>
